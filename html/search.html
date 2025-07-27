@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Search Results</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <script defer src="../js/script.js"></script>
+    <script src="../js/search-data.js"></script>
+    <script src="../js/search.js"></script>
+</head>
+
+<body>
+    <header>
+        <!-- include your logo/nav/search bar here -->
+    </header>
+
+    <main class="content-section">
+        <h2>Search Results</h2>
+        <div id="search-results">Loading results...</div>
+    </main>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const query = params.get("q")?.toLowerCase() || "";
+
+        const resultsContainer = document.getElementById("search-results");
+
+        const results = siteData.filter(item =>
+            item.title.toLowerCase().includes(query) ||
+            item.keywords.toLowerCase().includes(query) ||
+            item.description.toLowerCase().includes(query)
+        );
+
+        if (results.length > 0) {
+            resultsContainer.innerHTML = results
+                .map(result => `
+                    <div class="preview-card">
+                        <h4><a href="${result.url}">${result.title}</a></h4>
+                        <p>${result.description}</p>
+                        <a href="${result.url}" class="btn">Visit Page</a>
+                    </div>
+        `)
+            .join("");
+        } else {
+            resultsContainer.innerHTML = `<p>No results found for "<strong>${query}</strong>".</p>`;
+        }
+    </script>
+</body>
+
+</html>
